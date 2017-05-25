@@ -1,2 +1,2 @@
 # Software-Engineering-Curriculum-Design
-This repository is for the `software engineering curriculum design` of Jilin University.
+This repository is for the `Software Engineering Curriculum Design` of Jilin University.
