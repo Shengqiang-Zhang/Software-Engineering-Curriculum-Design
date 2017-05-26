@@ -1,0 +1,398 @@
+Title: 软工课设题目
+Title Footer: &date;
+Package: [UTF8]ctex
+Package: indentfirst
+Tex header: \setlength{\parindent}{2em}
+Author: 张盛强
+Email:zhangsq5829@gmail.com
+Heading depth:4
+Package:[left=2.5cm,right=2.5cm,top=3cm,bottom=3cm]geometry
+
+[TITLE]
+
+# Problem Statement问题描述
+
+作为Acme公司的领导，你接到一项任务：建立一个新的工资单系统去取代原有的系统，原有的系统已经非常过时了。Acme现在需要一个新的系统来允许员工记录考勤信息(`timecard information`)，并且能根据工作时长和销售业绩来自动产生薪水(`paychecks`)(for commissioned employees)。
+
+新的系统必须是最新技术的，并且有一个基于Windows的桌面接口，来允许员工进入员工考勤信息界面，进入购买订单界面，改变员工喜好（例如支付方式），并且创建不同的报告。这个系统贯穿整个公司，运行在员工个人的桌面上。出于安全和查账的原因，雇员们只能访问并编辑属于他们自己的考勤信息和购买订单。
+
+系统会保留公司所有员工的信息（Acme现在全球范围内拥有5000名员工）。系统必须能够按时支付每位员工正确的数目金钱（用他们个人喜欢的领工资方法）。Acme出于价格的考虑，不想替换他们遗留的一个数据库，工程管理数据库（the Project Management Database),它包含关于工程(Projects)和费用(charge numbers)的所有信息。新的系统必须和已有的Project Management Database协同工作，这是一个工作在IBM主机上的DB2数据库。工资单系统可以访问,但是不能更新存储在Project Management Database中的数据。
+
+一些员工按小时工作，所以他们就按照小时来计算工资。他们提交记录着日期(date)和为某特定`charge number`工作小时数的考勤卡(timecards)。如果有人工作超过8小时，那么Acme会为他们超过8小时的工作时间部分支付他们一般每小时工钱的1.5倍工资。按小时支付的员工每周五发工资。
+
+一些员工以固定薪水支付工资。即使是按固定工资支付的，他们也需要提交记录着日期和工作小时的考勤卡。这样系统可以追踪他们为特定`charge  number`工作的小时数。这些人在每个月的最后一个工作日领工资。
+
+一些有薪水的员工也接受基于他们销售量的佣金(commission)。他们提交反映了日期和销售额的购买订单(purchase orders)，`commission rate` 根据每个员工的情况而定，`Commission rate`是 10%，15%，25%，35%的其中之一。
+
+新系统最迫切需要的一个特色是能生成员工报告(Employee reporting)，员工能在系统上查询工作时长，为某个项目（即charge number）付出的总时长，年初至今收到的总工资，剩余的假期时间，等等。
+
+员工可以选择他们的支付方式。他们可以选择将他们的薪水支票邮寄到他们提交的地址，他们也可以要求直接存款并且将存款存进他们选择的银行账户。员工也可以选择在办公室直接拿走薪水支票。
+
+工资单管理员维护着员工信息。工资单管理者对以下事务负有职责：添加新员工，删除员工，更改员工信息例如姓名，地址，雇佣方式(小时制，薪水制，委任制),也包括运行管理报告(running administrative reports)。
+
+工资单应用程序会自动在每周五和当月的最后一个工作日工作。它会在这些日子里支付工资给适当的员工。这个系统会被告诉在哪天要付给员工工资，因此它会生成支付记录，该记录涵盖从最近一次支付的日期到特定的日期。新的系统这样设计是为了工资单总是可以自动生成，而不用任何人工干预。
+
+# Glossary术语表
+## Introduction
+这篇文档是为特定问题领域，解释项定义的术语，这些术语可能对用例描述和其他项目文档的阅读者来说不熟悉。这篇文档常常被当做非正式的数据字典来使用，抓住数据定义使得用例描述和其他项目文档可以更加集中于系统必须做什么。
+
+## Definitions
+这篇术语表包含工资单系统中关键概念的`working  definitions`。
+
+## Bank System
+直接存款交易所涉及的一切银行
+
+## Employee
+为公司工作的人，他们拥有并操作工资单系统
+
+## Payroll Administrator
+负责维护员工和员工信息的人
+
+## Project Management Database
+包含项目和charge numbers所有信息的遗留数据库
+
+## System Clock
+内部追踪时间的系统时钟，这个内部始终会在合适的时间自动地运行工资单系统
+
+## Pay Period
+一个员工已经被支付的总时间
+
+## Paycheck
+在一个特定的Pay Period内一个员工被支付的工资数目的记录
+
+## Payment Method
+员工被支付的方式，有现取，邮寄，直接存储。
+
+## Timecard
+在一个特定的Pay Period期间员工工作时长的记录
+
+## Purchase Order
+一个员工的销售记录
+
+## Salaried Employee
+接受薪水的员工
+
+## Commissionded Employee
+接受薪水+提成的员工
+
+## Hourly Employee
+按小时支付的员工
+
+# Supplementary Specification补充说明
+## Objectives目的
+这篇文档的目的是定义工资单系统的需求。补充说明列出了没有在用例模型的用例中列出的要求。这篇补充说明和用例模型一起组成这个系统需求的完备集。
+
+## Scope范围
+这份补充说明适用于OOAD学生开发的工资单系统。
+
+这份说明定义了系统的非功能性需求，比如可靠性，实用性，性能，可支持性，也包括一些在用例间通用的功能性需求。（功能性需求在用例说明中）
+
+## References
+None
+
+## Functionality
+None
+
+## Usability
+None
+
+## Reliability
+主要的系统98%的时间都在运行。工资单在运行时系统是开机的并且在运行，这是很必要的。（每个周五以及当月的最后一个工作日）
+
+## Performance
+这个系统必须能够允许同时有2000个用户在任何时间访问中央数据库，500个用户在任何一个时间访问本地数据库。
+
+## Supportability
+None
+
+## Security
+这个系统必须能防止员工更改除自己以外的其他任何人的考勤记录。另外，出于安全考虑，只有工资单管理员被允许更改任意员工的信息with the exception of the payment delivery method.
+
+## Design Constraints
+这个系统应该和已经存在的遗留系统`the Project Management Database`融为一体。这个遗留系统是一个工作在IBM主机上的DB2数据库。
+
+这个系统应该通过一个电子交易接口和已有的银行系统产生联系，(NOTE:外部银行系统的一般接口需要在这个过程早期被定义并且在这里定义 或者 在一个分开的支持性文档中。比如说不在这门课范围内的一个定义)
+
+这个系统需要提供一个基于Windows的桌面接口。
+
+# Use-Case model
+## Payroll System Use-Case Model Main Diagram
+![软工图像]
+
+[软工图像]: images/-.png "软工图像" { width:auto; max-width:90% }
+
+## Create Administrative Report
+### Brief Description
+用例允许工资单管理员创建`Total Hours Worked`或`Pay Year-to-Date`报告。
+
+### Flow of Events 事件流
+#### _Basic Flow_
+  
+当工资单管理员请求系统生成管理报告时用例开始。
+
+1. 系统请求工资单管理员详细说明以下报告标准：
+    * Report Type(total hours or pay Year-to-Date)
+    * Begin and end dates for the Report
+    * Employee name(s)
+
+2. 一旦工资单管理员提供了要求的信息，系统就可以提供一份满足报告要求的报告。
+
+3. 工资单管理员可能在稍后会请求保存报告。与此同时，系统会要求工资单管理员提供保存报告所需的名字和存储位置。
+
+4. 一旦工资单管理员提供了要求的信息并且做出了保存报告的决定，系统就会以特定的名字在特定的存储位置保存报告。
+
+5. 如果工资单管理员没有选择保存报告，则该报告将会被丢弃。
+
+#### _Alternative Flows_
+
+- Requested Information Unavailable
+
+  如果在`Basic Flow`中，请求的信息没有满足，系统将会给出错误信息。工资单管理员可以选择：
+  - 要么会退到`Basic Flow`的开始，
+  - 要么在用例结束点取消操作
+
+- Invalid Format or Insufficient Information
+
+  如果在`Basic Flow`中，工资单管理员没有足够的特定信息去创建选择的报告，系统会提示缺失的信息。工资单管理员可以：
+  - 要么进入缺失信息
+  - 要么选择在用例结束点取消操作
+
+### Special Requirements
+None
+
+### Pre-Conditions
+工资单管理员必须得登录进系统，使得用例开始。
+
+### Post-Conditions
+系统状态不会被用例改变
+
+### Extension Points
+None
+
+## Create Employee Report
+### Brief Description
+用例允许员工创建一个以下类型的报告：
+
+- `Total Hours Worked`,
+- `Total Hours Worked for a Project`,
+- `Vacation/Sick Leave`,
+- `Total Pay Year-to-Date`.
+
+### Flow of Events
+#### _Basic Flow_
+  
+在员工希望创建以上4中类型报告之一时，用例开始。
+
+1. 系统要求员工详细说明下列报告标准：
+  - Report Type(以上4中类型之一)
+  - Begin and end dates for the report
+2. 若员工选择`Total Hours Worked for a Project`报告时，系统会从`Project Management Database`中检索并展示一列可用的`charge numbers`，然后系统会要求员工选择一个`charge number`
+3. 一旦员工提供了必要的信息，系统就会生成满足报告标准的报告。
+4. 员工稍后可能会请求系统保存报告。这时，系统会要求员工提供报告的名字和存储位置。
+5. 一旦员工提供了要求的信息并且做出了保存报告的决定，系统就会以特定的名字在特定的存储位置保存报告。
+6. 如果员工没有选择保存报告，则报告会被丢弃。
+
+#### _Alternative Flows_
+- Requested Information Unavailable
+
+  如果在`Basic Flow`中，请求的信息没有满足，系统将会给出错误信息。员工可以选择：
+  - 要么会退到`Basic Flow`的开始，
+  - 要么在用例结束点取消操作
+
+
+- Invalid Format or Insufficient Information
+
+  如果在`Basic Flow`中，员工没有足够的特定信息去创建选择的报告，系统会提示缺失的信息。员工可以：
+  - 要么进入缺失信息
+  - 要么选择在用例结束点取消操作
+
+### Special Events
+None
+
+### Pre-Conditions
+在用例开始前，员工必须登录进系统。
+
+### Post-Conditions
+系统的状态不会被用例改变
+
+### Extension Points
+None
+
+## Login
+### Brief Description
+这个用例描述了用户怎样登录进工资单系统
+
+### Flow of Events 事件流
+#### _Basic Flow_
+  
+当有人希望登录进工资单系统时用例开始。
+
+1. 用户输入用户名和密码。
+2. 系统验证用户名和密码，之后让用户登录进系统
+
+#### _Alternative Flows_
+- Invalid Name/Password 
+
+  如果在`Basic Flow`中，用户输入了无效的用户名和密码，系统将会展示错误信息。
+  用户可以选择：
+  - 退回到`Basic Flow`的开始
+  - 或在用例结束点取消登录
+
+### Special Requirements
+None
+
+### Pre-Conditions
+系统在登录状态并且显示着登录界面
+
+### Post-Conditions
+如果这个用例成功，用户现在已经登录进了系统；否则系统状态不会改变。
+
+### Extension Points
+None
+
+## Maintain Employee Information
+### Brief Description
+这个用例允许工资单管理员维护员工信息。包含的操作有：
+
+- Adding 添加
+- Changing 更改
+- Deleting  删除
+
+系统中员工的信息。
+
+### Flow of Events
+#### _Basic Flow_
+  
+当工资单管理员希望添加、修改 或/和 删除系统中员工的信息时，本用例开始。
+
+1. 系统要求工资单管理员详细说明他/她想进行的动作（Add an Employee,Update an Employee,or Delete an Employee)
+2. 一旦工资单管理员提供了需要的信息，以下`sub flows`之一将被执行：
+  - 如果工资单管理员选择`Add an Employee`，则子流`Add an Employee`被执行
+  - 如果工资单管理员选择`Update an Employee`，则子流`Update an Employee`被执行
+  - 如果工资单管理员选择`Delete an Employee`，则子流`Delete an Employee`被执行
+
+  ##### Add an Employee
+  1. 系统要求工资单管理员输入员工信息，包括：
+  2. 
+    - name
+    - employee type(hour,salaried,commissionded)
+    - mailing address
+    - social security number
+    - standard tax deductions
+    - other deductions(401k,medical)
+    - phone number
+    - hourly rate(for hourly employees)
+    - salary(for salaried and commissionded employees)
+    - commission rate(for commissionded employees)
+    - hour limit(一些员工可能不能超时工作)
+
+  3. 一旦工资单管理员提供了要求的信息，系统就会产生一个独有的`Employee id number`并将它赋予员工，并且生成`pickup`的默认方法`paycheck delivery method`,这样员工就已经被添加进系统了。
+  4. 系统提供给工资单管理员新员工的`id`。
+
+  ##### Update an Employee
+  1. 系统要求工资单管理员输入员工的`id`
+  2. 工资单管理员输入员工的`id`，系统检索并显示员工信息
+  3. 工资单管理员对员工信息做出想要的更改，这包括子流`Add an Employee`下的任意特定信息
+  4. 一旦工资单管理员更新了必要的信息，系统就会用更改后的信息来更新员工记录。
+
+  ##### Delete an Employee
+  1. 系统要求工资单管理员指定员工`id`
+  2. 工资单管理员输入员工`id`,系统检索并显示员工信息
+  3. 系统提示工资单管理员是否确认删除该员工
+  4. 工资单管理员确认删除操作
+  5. 系统标记要删除的员工记录，当下一次工资单运行时，系统会生成一个删除员工的`final paycheck`，然后从系统中将该员工移除。
+
+#### _Alternative Flows_
+- **Employee Not Found**
+
+  若在子流`Update an Employee`或`Delete an Employee`中，指定的员工`id number`不存在，系统就显示一个错误信息`an error message`。工资单管理员可以：
+  - 输入一个不同的`id number`
+  - 或在用例结束点取消操作
+- **Delete Cancelled**
+
+  若在子流`Delete an Employee`中，工资单管理员决定不删除员工，那么删除操作就被取消，`Basic Flow`会在开始重新开始。
+
+### Special Requirements
+None
+
+### Pre-Conditions
+工资单管理员必须在用例开始前登录进系统
+
+### Post-Conditions
+如果用例成功，员工信息就从系统中成功地`added`，`updated`，`deleted`。否则，系统状态不改变。
+
+### Extension Points
+None
+
+## Maintain Purchase Order
+### Brief Description
+这个用例允许一个拿佣金的员工`Commissioned Employee`记录并维护购买订单`purchase orders`。这包括`Adding`,`Changing`,`Deleting` purchase orders。`Commissioned Employees`必须得记录他们的每条`purchase orders`，这样他们才能收到佣金。
+
+### Flow of Events
+#### *Basic Flow*
+  
+当拿佣金的员工希望从系统中 添加，更改，或/和 删除购买订单信息时，这个用例开始。
+
+1. 系统会请求`Commissioned Employee`指定他/她想进行的操作功能(Create a Purchase Order,
+Update a Purchase Order, or Delete a Purchase Order)
+2. 一旦`Commissioned Employee`提供了请求的信息，以下子流之一将会被执行：
+  - 若`Commissioned Employee`选择了`Create a Purchase Order`,则子流`Create a Purchase Order`被执行
+  - 若`Commissioned Employee`选择了`Update a Purchase Order`,则子流`Update a Purchase Order`被执行
+  - 若`Commissioned Employee`选择了`Delete a Purchase Order`,则子流`Delete a Purchase Order`被执行
+
+  
+  ##### Create a Purchase Order
+  1. 系统要求`Commissioned Employee`输入购买订单信息，这包括：
+      - customer point of contact
+      - customer billing address
+      - product(s) purchased
+      - date
+  2. 一旦`Commissioned Employee`提供了请求的信息，系统就会为购买订单产生一个特有的`purchase order number`。购买订单就会被加入`Commissioned Employee`的系统中。
+  3. 系统会为`Commissioned Employee`提供一个新的购买订单`id`
+
+  
+  ##### Update a Purchase Order
+  
+    1. 系统请求`Commissioned Employee`输入购买订单的`id`
+    2. `Commissioned Employee`输入购买订单`id`
+    3. 系统检索和购买订单`id`对应的购买订单
+    4. 系统验证该购买订单是该`Commissioned Employee`的购买订单，然后该购买订单变为开放状态
+    5. 系统显示购买订单
+    6. `Commissioned Employee`对购买订单信息做出想要的更改。这包括子流`Create a Purchase Order`下的任意特定信息
+    7. 一旦`Commissioned Employee`更新了必要的信息，系统会用更改后的信息更新购买订单。
+   
+  ##### Delete a Purchase Order
+  
+    1. The system requests that the Commissioned Employee specify the purchase order id.
+    2. The Commissioned Employee enters the purchase order id.
+    3. The system retrieves the purchase order associated with the purchase order id.
+    4. The system verifies that the purchase order is a purchase order for the Commissioned Employee, and
+    that the purchase order is open.
+    5. The system displays the purchase order.
+    6. The system prompts the Commissioned Employee to confirm the deletion of the purchase order.
+    7. The Commissioned Employee verifies the deletion.
+    8. The system removes the purchase order from the system
+
+#### _Alternative Flows_
+- **Purchase Order Not Found**
+
+- **Invalid Access to a Purchased Order**
+
+- **Purchase Order is Closed**
+
+- **Delete Cancelled**
+
+### Special Requirements
+None
+
+### Pre-Conditions
+
+### Post-Conditions
+
+### Extension Points
+
+## Maintain Timecard
+
+## Run Payroll
+
+## Select Payment Method
