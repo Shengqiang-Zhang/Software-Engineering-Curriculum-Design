@@ -1,8 +1,8 @@
 Title: 软工课设题目
 Title Footer: &date;
 Package: [UTF8]ctex
-Package: indentfirst
-Tex header: \setlength{\parindent}{2em}
+Package: parskip
+Tex header: \setlength{\parindent}{0cm}
 Author: 张盛强
 Email:zhangsq5829@gmail.com
 Heading depth:4
@@ -12,12 +12,10 @@ Package:[left=2.5cm,right=2.5cm,top=3cm,bottom=3cm]geometry
 
 # Problem Statement问题描述
 
-
 作为Acme公司的领导，你接到一项任务：建立一个新的工资单系统去取代原有的系统，原有的系统已经非常过时了。Acme现在需要一个新的系统来允许员工记录考勤信息(`timecard information`)，并且能根据工作时长和销售业绩来自动产生薪水(`paychecks`)(for commissioned employees)。
 
 
 新的系统必须是最新技术的，并且有一个基于Windows的桌面接口，来允许员工进入员工考勤信息界面，进入购买订单界面，改变员工喜好（例如支付方式），并且创建不同的报告。这个系统贯穿整个公司，运行在员工个人的桌面上。出于安全和查账的原因，雇员们只能访问并编辑属于他们自己的考勤信息和购买订单。
-
 
 系统会保留公司所有员工的信息（Acme现在全球范围内拥有5000名员工）。系统必须能够按时支付每位员工正确的数目金钱（用他们个人喜欢的领工资方法）。Acme出于价格的考虑，不想替换他们遗留的一个数据库，工程管理数据库（the Project Management Database),它包含关于工程(Projects)和费用(charge numbers)的所有信息。新的系统必须和已有的Project Management Database协同工作，这是一个工作在IBM主机上的DB2数据库。工资单系统可以访问,但是不能更新存储在Project Management Database中的数据。
 
@@ -37,8 +35,6 @@ Package:[left=2.5cm,right=2.5cm,top=3cm,bottom=3cm]geometry
 
 # Glossary术语表
 ## Introduction
-
-
 这篇文档是为特定问题领域，解释项定义的术语，这些术语可能对用例描述和其他项目文档的阅读者来说不熟悉。这篇文档常常被当做非正式的数据字典来使用，抓住数据定义使得用例描述和其他项目文档可以更加集中于系统必须做什么。
 
 ## Definitions
